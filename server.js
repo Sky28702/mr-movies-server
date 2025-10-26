@@ -1,5 +1,5 @@
 import express from "express";
-import userRouter from "./routes/authentication/signUp.js";
+import userRouter from "./routes/route.js";
 import cors from "cors";
 import connectdb from "./db/dbConnect.js";
 
