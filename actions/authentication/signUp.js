@@ -1,6 +1,5 @@
-import connectdb from "../../db/dbConnect";
 import mongoose from "mongoose";
-import User from "../../models/authentication/signUp";
+import User from "../../models/authentication/signUp.js";
 import bcrypt from "bcryptjs";
 
 async function signUp(req, res) {
