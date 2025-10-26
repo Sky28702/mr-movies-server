@@ -37,10 +37,11 @@ async function signin(req, res) {
       });
       return;
     } else {
-      return {
+      res.send({
         success: false,
         message: "Incorrect credintals",
-      };
+      });
+      return;
     }
   } catch (error) {
     console.log(error);
