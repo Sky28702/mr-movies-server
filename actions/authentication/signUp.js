@@ -58,6 +58,10 @@ async function Fav(req, res) {
 
     // Find user by ID
     const user = await User.findById(userId);
+    if (!user.favorites) {
+      user.favorites = [];
+    }
+
     const movieIndex = user.favorites.indexOf(movieId);
 
     if (movieIndex > -1) {
