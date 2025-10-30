@@ -52,4 +52,39 @@ async function signUp(req, res) {
   }
 }
 
-export { signUp };
+async function Fav(req, res) {
+  try {
+    const { userId, movieId } = req.body;
+
+    // Find user by ID
+    const user = await User.findById(userId);
+    const movieIndex = user.favorites.indexOf(movieId);
+
+    if (movieIndex > -1) {
+      user.favorites.splice(movieIndex, 1);
+      /this will removie it as wel know/;
+      await user.save();
+
+      res.send({
+        message: "Removed from favorites",
+        isFavorite: false,
+        favorites: user.favorites,
+      });
+    } else {
+      user.favorites.push(movieId); // else add it like we know
+      await user.save();
+
+      res.send({
+        message: "Added to favorites",
+        isFavorite: true,
+        favorites: user.favorites,
+      });
+    }
+
+    // basic code
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { signUp, Fav };
