@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     image: { type: String },
-    favorites: [{ type: Number }],
+    favorites: [{ type: String }],
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

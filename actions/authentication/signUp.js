@@ -54,41 +54,60 @@ async function signUp(req, res) {
 
 async function Fav(req, res) {
   try {
-    const { userId, movieId } = req.body;
+    let data = req.body;
+    let userId = req.body.userId;
+    let movieId = req.body.movieId;
 
-    // Find user by ID
     const user = await User.findById(userId);
-    if (!user.favorites) {
-      user.favorites = [];
-    }
 
-    const movieIndex = user.favorites.indexOf(movieId);
+    let index = user.favorites.indexOf(movieId);
 
-    if (movieIndex > -1) {
-      user.favorites.splice(movieIndex, 1);
-      /this will removie it as wel know/;
+    if (!user.favorites.includes(movieId)) {
+      user.favorites.push(movieId);
       await user.save();
-
       res.send({
-        message: "Removed from favorites",
-        isFavorite: false,
-        favorites: user.favorites,
+        data: data,
+        click: true,
       });
     } else {
-      user.favorites.push(movieId); // else add it like we know
-      await user.save();
-
-      res.send({
-        message: "Added to favorites",
-        isFavorite: true,
-        favorites: user.favorites,
-      });
+      if (index !== -1) {
+        user.favorites.splice(index, 1);
+        await user.save();
+        res.send({
+          data: data,
+          click: false,
+        });
+      }
     }
-
-    // basic code
   } catch (error) {
     console.log(error);
   }
 }
 
-export { signUp, Fav };
+async function likeOnMovie(req, res) {
+  try {
+    let data = req.body;
+    let userId = req.body.userId;
+    let movieId = req.body.movieId;
+
+    const user = await User.findById(userId);
+
+    await user.favorites.indexOf(movieId);
+
+    if (user.favorites.includes(movieId)) {
+      res.send({
+        data: data,
+        click: true,
+      });
+    } else {
+      res.send({
+        data: data,
+        click: false,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { signUp, Fav, likeOnMovie };
