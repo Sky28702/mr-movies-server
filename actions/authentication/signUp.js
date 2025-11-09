@@ -62,29 +62,24 @@ async function Fav(req, res) {
 
     let index = user.favorites.indexOf(movieId);
 
-    if (!user.favorites.includes(movieId)) {
+    if (index === -1) {
       user.favorites.push(movieId);
-      await user.save();
-      res.send({
-        data: data,
-        click: true,
-      });
     } else {
-      if (index !== -1) {
-        user.favorites.splice(index, 1);
-        await user.save();
-        res.send({
-          data: data,
-          click: false,
-        });
-      }
+      user.favorites.splice(index, 1);
     }
+
+    await user.save();
+
+    res.send({
+      data: data,
+      click: user.favorites.includes(movieId),
+    });
   } catch (error) {
     console.log(error);
   }
 }
 
-async function likeOnMovie(req, res) {
+async function likeStatus(req, res) {
   try {
     let data = req.body;
     let userId = req.body.userId;
@@ -92,7 +87,7 @@ async function likeOnMovie(req, res) {
 
     const user = await User.findById(userId);
 
-    await user.favorites.indexOf(movieId);
+    let index = user.favorites.indexOf(movieId);
 
     if (user.favorites.includes(movieId)) {
       res.send({
@@ -110,4 +105,34 @@ async function likeOnMovie(req, res) {
   }
 }
 
-export { signUp, Fav, likeOnMovie };
+async function readFavMovies(req, res) {
+  try {
+    let data = req.body;
+    let userId = req.body.userId;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.send({
+        message: "cant find a thing",
+      });
+    }
+
+    if (user) {
+      const fav = user.favorites;
+      res.send({
+        success: true,
+        favourites: fav,
+        data: data,
+      });
+    } else {
+      res.send({
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { signUp, Fav, likeStatus, readFavMovies };
