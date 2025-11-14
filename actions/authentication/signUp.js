@@ -1,6 +1,9 @@
-import mongoose from "mongoose";
+import Movie from "../../models/movies.js";
 import User from "../../models/authentication/signUp.js";
 import bcrypt from "bcryptjs";
+import axios from "axios";
+import mongoose from "mongoose";
+const API_KEY = `434707e1ce537ca1f4315bddd0839d57`;
 
 async function signUp(req, res) {
   try {
@@ -62,6 +65,26 @@ async function Fav(req, res) {
 
     let index = user.favorites.indexOf(movieId);
 
+    let movie = await Movie.findOne({ movieId: movieId });
+
+    const api = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
+
+    if (!movie) {
+      const tmdbResponse = await axios.get(api);
+
+      const details = tmdbResponse.data;
+      movie = new Movie({
+        movieId: movieId,
+        movieName: details.original_title,
+        moviePoster: details.poster_path,
+        movieRate: details.vote_average,
+        movieYear: details.release_date.split("-")[0],
+        movieLanguage: details.original_language,
+      });
+
+      await movie.save();
+    }
+
     if (index === -1) {
       user.favorites.push(movieId);
     } else {
@@ -118,11 +141,14 @@ async function readFavMovies(req, res) {
       });
     }
 
+    const favoriteMovies = await Movie.find({
+      movieId: { $in: user.favorites },
+    });
+
     if (user) {
-      const fav = user.favorites;
       res.send({
         success: true,
-        favourites: fav,
+        favourites: favoriteMovies,
         data: data,
       });
     } else {
