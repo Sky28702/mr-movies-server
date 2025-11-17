@@ -5,7 +5,7 @@ import connectdb from "./db/dbConnect.js";
 
 const PORT = 8000;
 const app = express();
-
+// s
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
