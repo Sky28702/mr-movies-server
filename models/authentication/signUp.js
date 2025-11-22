@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     image: { type: String },
     favorites: [{ type: String }],
-    view: [{ type: String }],
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

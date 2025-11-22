@@ -4,7 +4,7 @@ import { signin } from "../actions/authentication/login.js";
 import { Fav } from "../actions/authentication/signUp.js";
 import { likeStatus } from "../actions/authentication/signUp.js";
 import { readFavMovies } from "../actions/authentication/signUp.js";
-import { viewCount } from "../actions/authentication/signUp.js";
+import { viewCount } from "../actions/mr-movie.js";
 
 const userRouter = Router();
 userRouter.post("/signup", signUp);
