@@ -161,31 +161,4 @@ async function readFavMovies(req, res) {
   }
 }
 
-// async function viewCount(req, res) {
-//   try {
-//     let data = req.body;
-//     let userId = req.body.userId;
-//     let movieId = req.body.movieId;
-//     const user = await User.findById(userId);
-//     if (!user) {
-//       res.send({
-//         message: "cant find a thing",
-//       });
-//       return;
-//     }
-
-//     if (!user.view.includes(movieId)) {
-//       user.view.push(movieId);
-//       await user.save();
-//       res.send({
-//         message: "increased",
-//         data: data,
-//       });
-//       return;
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
 export { signUp, Fav, likeStatus, readFavMovies };

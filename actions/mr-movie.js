@@ -40,4 +40,49 @@ async function viewCount(req, res) {
     });
   }
 }
-export { viewCount };
+
+async function viewNumber(req, res) {
+  try {
+    let data = req.body;
+    let movieId = req.body.movieId;
+
+    let movieUser = await MovieUser.findOne({ movieId: movieId });
+
+    if (!movieUser) {
+      res.send({
+        message: `no movie found`,
+      });
+    } else {
+      const count = movieUser.userId.length;
+      res.send({
+        data: data,
+        count: count,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function mostViewRead(req, res) {
+  try {
+    const mostViewed = await MovieUser.aggregate([
+      {
+        $project: {
+          movieId: 1,
+          views: { $size: "$userId" },
+        },
+      },
+      { $sort: { views: -1 } },
+      { $limit: 4 },
+    ]);
+
+    res.send({
+      mostViewed: mostViewed,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { viewCount, viewNumber, mostViewRead };
