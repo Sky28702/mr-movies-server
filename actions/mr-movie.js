@@ -73,7 +73,7 @@ async function mostViewRead(req, res) {
           views: { $size: "$userId" },
         },
       },
-      { $sort: { views: -1 } },
+      { $sort: { views: -1 } }, // quite imp to remember
       { $limit: 4 },
     ]);
 
